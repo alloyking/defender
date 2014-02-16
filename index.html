@@ -20,7 +20,6 @@ function preload() {
 
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
-    game.load.image('star', 'assets/star.png');
     game.load.spritesheet('ship', 'assets/ship.png', 32, 48);
     game.load.image('bullet', 'assets/bullet.png');
     game.load.image('alien', 'assets/enemy.png');
@@ -32,6 +31,7 @@ var fireButton;
 var bulletTime = 0;
 var bullets;
 var alien;
+var aliens
 
 function create() {
 
@@ -61,15 +61,23 @@ function create() {
 
     // The player and its settings
     player = game.add.sprite(32, game.world.height - 150, 'ship');
-    alien = game.add.sprite(game.world.width - 100  , game.world.height - 150, 'alien');
-
+    
     //  Player physics properties.
     player.body.collideWorldBounds = true;
+
+
+    aliens = game.add.group();
+    createAliens();
 
     cursors = game.input.keyboard.createCursorKeys();
     
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+}
+
+function createAliens(){
+    //loop here - alien into aliens group
+    var alien = aliens.create(550, 350, 'alien');
 }
 
 function update() {
@@ -113,7 +121,7 @@ function update() {
        fireBullet();
     }
 
-    game.physics.collide(bullets, alien, collisionHandler, null, this);
+    game.physics.collide(bullets, aliens, collisionHandler, null, this);
 
 }
 
