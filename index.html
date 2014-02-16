@@ -26,7 +26,7 @@ function preload() {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
     game.load.spritesheet('ship', 'assets/ship.png', 32, 48);
-    game.load.image('bullet', 'assets/bullet.png');
+    game.load.spritesheet('bullet', 'assets/bullet.png', 7, 7);
     game.load.spritesheet('alien', 'assets/invader32x32x4.png', 32, 32);
     game.load.spritesheet('kaboom', 'assets/explosion.png', 128, 128);
 }
@@ -161,7 +161,8 @@ function fireBullet () {
     {
         //  Grab the first bullet we can from the pool
         bullet = bullets.getFirstExists(false);
-
+        bullet.animations.add('bullet');
+        bullet.play('bullet', 30, true, true);
         if (bullet)
         {
             //  And fire it
