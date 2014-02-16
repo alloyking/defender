@@ -14,6 +14,11 @@
 
 <script type="text/javascript">
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 
 function preload() {
@@ -22,7 +27,7 @@ function preload() {
     game.load.image('ground', 'assets/platform.png');
     game.load.spritesheet('ship', 'assets/ship.png', 32, 48);
     game.load.image('bullet', 'assets/bullet.png');
-    game.load.image('alien', 'assets/enemy.png');
+    game.load.spritesheet('alien', 'assets/invader32x32x4.png', 32, 32);
 }
 
 var platforms;
@@ -32,6 +37,8 @@ var bulletTime = 0;
 var bullets;
 var alien;
 var aliens
+var GROUND_HEIGHT = 64;
+
 
 function create() {
 
@@ -51,7 +58,7 @@ function create() {
     platforms = game.add.group();
 
     // Here we create the ground.
-    var ground = platforms.create(0, game.world.height - 64, 'ground');
+    var ground = platforms.create(0, game.world.height - GROUND_HEIGHT, 'ground');
 
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     ground.scale.setTo(2, 2);
@@ -77,7 +84,14 @@ function create() {
 
 function createAliens(){
     //loop here - alien into aliens group
-    var alien = aliens.create(550, 350, 'alien');
+    for(i=0; i<10; ++i){
+        var alien = aliens.create(getRandomInt(400, game.world.width), getRandomInt(10, game.world.height - GROUND_HEIGHT), 'alien');
+        
+        alien.anchor.setTo(0.5, 0.5);
+        alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+        alien.play('fly');
+    }
+    
 }
 
 function update() {
