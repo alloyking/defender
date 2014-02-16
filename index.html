@@ -28,6 +28,7 @@ function preload() {
     game.load.spritesheet('ship', 'assets/ship.png', 32, 48);
     game.load.image('bullet', 'assets/bullet.png');
     game.load.spritesheet('alien', 'assets/invader32x32x4.png', 32, 32);
+    game.load.spritesheet('kaboom', 'assets/explosion.png', 128, 128);
 }
 
 var platforms;
@@ -38,6 +39,7 @@ var bullets;
 var alien;
 var aliens
 var GROUND_HEIGHT = 64;
+var explosions;
 
 
 function create() {
@@ -76,9 +78,22 @@ function create() {
     aliens = game.add.group();
     createAliens();
 
+    //  An explosion pool
+    explosions = game.add.group();
+    explosions.createMultiple(30, 'kaboom');
+    explosions.forEach(setupInvader, this);
+
     cursors = game.input.keyboard.createCursorKeys();
     
     fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+}
+
+function setupInvader (invader) {
+
+    invader.anchor.x = 0.5;
+    invader.anchor.y = 0.5;
+    invader.animations.add('kaboom');
 
 }
 
@@ -164,7 +179,13 @@ function collisionHandler (bullet, alien) {
     alien.kill();
 
     //  Increase the score
-   
+    //  
+    //  
+    
+    //explosion
+    var explosion = explosions.getFirstDead();
+    explosion.reset(alien.body.x, alien.body.y);
+    explosion.play('kaboom', 30, false, true);
 
 }
 
